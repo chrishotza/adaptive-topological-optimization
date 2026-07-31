@@ -1,0 +1,6 @@
+Instancia,N,Strategy,Cut_v5.0,Time_v5.0,Blocks_Accepted
+LesMis,77,frontier,25,0.0017631750006330549,0
+PowerGrid_Sim,2000,frontier,1327,0.21857497800010606,10
+Social_Network,1500,cohesion,595,0.1552574369998183,6
+Barabasi_Albert,2000,frontier,2870,0.399367782999434,1
+Erdos_Renyi,2000,frontier,15517,0.36470298200038087,0

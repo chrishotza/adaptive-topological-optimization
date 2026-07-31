@@ -1,0 +1,17 @@
+==================================================================================================================================
+ ETAPA 2B: VALIDACIÓN DEL ESCAPE NO LOCAL CONTROLADO (ENLC) CALIBRADO
+==================================================================================================================================
+[REGISTRO] Barabasi_Albert    | Escapes ejecutados: 3 | Logs de transición: [DictType[unicode_type,int64]<iv=None>({escape_id: 1, iteracion: 2, nodos_afectados: 20, corte_previo: 2875, corte_post_escape: 3320}), DictType[unicode_type,int64]<iv=None>({escape_id: 2, iteracion: 5, nodos_afectados: 20, corte_previo: 2872, corte_post_escape: 3315}), DictType[unicode_type,int64]<iv=None>({escape_id: 3, iteracion: 7, nodos_afectados: 20, corte_previo: 2872, corte_post_escape: 3315})]
+[REGISTRO] Erdos_Renyi        | Escapes ejecutados: 3 | Logs de transición: [DictType[unicode_type,int64]<iv=None>({escape_id: 1, iteracion: 2, nodos_afectados: 20, corte_previo: 15517, corte_post_escape: 15734}), DictType[unicode_type,int64]<iv=None>({escape_id: 2, iteracion: 4, nodos_afectados: 20, corte_previo: 15558, corte_post_escape: 15739}), DictType[unicode_type,int64]<iv=None>({escape_id: 3, iteracion: 6, nodos_afectados: 20, corte_previo: 15543, corte_post_escape: 15736})]
+[REGISTRO] PowerGrid_Sim      | Escapes ejecutados: 3 | Logs de transición: [DictType[unicode_type,int64]<iv=None>({escape_id: 1, iteracion: 2, nodos_afectados: 20, corte_previo: 1345, corte_post_escape: 1647}), DictType[unicode_type,int64]<iv=None>({escape_id: 2, iteracion: 4, nodos_afectados: 20, corte_previo: 1345, corte_post_escape: 1647}), DictType[unicode_type,int64]<iv=None>({escape_id: 3, iteracion: 6, nodos_afectados: 20, corte_previo: 1345, corte_post_escape: 1647})]
+[REGISTRO] Social_Network     | Escapes ejecutados: 3 | Logs de transición: [DictType[unicode_type,int64]<iv=None>({escape_id: 1, iteracion: 2, nodos_afectados: 15, corte_previo: 618, corte_post_escape: 647}), DictType[unicode_type,int64]<iv=None>({escape_id: 2, iteracion: 4, nodos_afectados: 15, corte_previo: 645, corte_post_escape: 628}), DictType[unicode_type,int64]<iv=None>({escape_id: 3, iteracion: 6, nodos_afectados: 15, corte_previo: 618, corte_post_escape: 647})]
+
+==================================================================================================================================
+ [TABLA CONSOLIDADA ETAPA 2B: RENDIMIENTO DE ENLC CALIBRADO]
+==================================================================================================================================
+      Instancia    N  METIS  PFV Baseline  PFV + ENLC Calibrated Δ vs Baseline Δ vs METIS  Escapes
+Barabasi_Albert 2000   2961          2875                   2872            -3        -89        3
+    Erdos_Renyi 2000  15612         15517                  15543           +26        -69        3
+  PowerGrid_Sim 2000   1385          1345                   1345            +0        -40        3
+ Social_Network 1500    488           618                    645           +27       +157        3
+==================================================================================================================================

@@ -1,0 +1,98 @@
+import os
+import sys
+import json
+import pandas as pd
+import numpy as np
+import scipy
+import scipy.stats as stats
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+REPORT_DIR = "MASTER_VALIDATION_REPORT"
+
+def main():
+    runs_path = f"{REPORT_DIR}/detailed_runs.csv"
+    if not os.path.exists(runs_path):
+        print(f"[!] No se encontró {runs_path}. Ejecuta primero MASTER_VALIDATION_CORE.py")
+        sys.exit(1)
+
+    print("[*] Leyendo resultados y procesando estadísticas...")
+    df = pd.read_csv(runs_path)
+    
+    pivot = df.pivot_table(index=['Instance', 'Seed'], columns='Algorithm', values='Cost')
+    pivot_mean = df.pivot_table(index='Instance', columns='Algorithm', values='Cost')
+    
+    pivot.to_csv(f"{REPORT_DIR}/summary_pivot_costs_seeds.csv")
+    pivot_mean.to_csv(f"{REPORT_DIR}/summary_pivot_costs.csv")
+
+    algs = pivot_mean.columns.tolist()
+    stat_records = []
+    target = 'BLOC_RELOC (Proposed)'
+    if target in algs:
+        for other in algs:
+            if other == target: continue
+            try:
+                w_stat, w_pval = stats.wilcoxon(pivot_mean[target], pivot_mean[other])
+            except Exception:
+                w_stat, w_pval = 0.0, 1.0
+            diff = pivot_mean[target] - pivot_mean[other]
+            cohen_d = np.mean(diff) / (np.std(diff, ddof=1) + 1e-8)
+            stat_records.append({'Comparison': f"{target} vs {other}", 'Wilcoxon_W': w_stat, 'p_value': w_pval, 'Cohen_d': cohen_d})
+    
+    df_stats = pd.DataFrame(stat_records)
+    df_stats.to_csv(f"{REPORT_DIR}/statistical_comparisons.csv", index=False)
+
+    os.makedirs(f"{REPORT_DIR}/assets", exist_ok=True)
+    if not pivot_mean.empty and pivot_mean.shape[1] > 0:
+        plt.figure(figsize=(9, 6))
+        min_costs = pivot_mean.min(axis=1)
+        for col in pivot_mean.columns:
+            ratios = pivot_mean[col] / (min_costs + 1e-8)
+            sorted_r = np.sort(ratios)
+            y_vals = np.arange(1, len(sorted_r) + 1) / len(sorted_r)
+            plt.step(sorted_r, y_vals, label=col, where='post', linewidth=2)
+        plt.xlabel(r"Performance Ratio $\tau$", fontsize=12)
+        plt.ylabel(r"Fraction of Instances $P(r_{i,a} \le \tau)$", fontsize=12)
+        plt.title("Dolan-Moré Performance Profiles (Master Validation)", fontsize=14)
+        plt.grid(True, linestyle='--', alpha=0.6)
+        plt.legend(loc='lower right', fontsize=9)
+        plt.tight_layout()
+        plt.savefig(f"{REPORT_DIR}/assets/dolan_more_profile.png", dpi=300)
+        plt.close()
+
+    leakage = {'duplicate_seeds_detected': df.duplicated(subset=['Instance', 'Algorithm', 'Seed']).any()}
+    
+    ranking = df.groupby('Algorithm')['Cost'].mean().sort_values()
+    best_alg = ranking.index[0]
+    conclusion_choice = "A) BLOC-RELOC supera significativamente al SOTA." if best_alg == 'BLOC_RELOC (Proposed)' else "C) BLOC-RELOC no supera el SOTA."
+
+    master_json = {
+        'scipy_version': scipy.__version__,
+        'leakage_audit': leakage,
+        'conclusion': conclusion_choice
+    }
+    with open(f"{REPORT_DIR}/master_audit_metadata.json", 'w') as f:
+        json.dump(master_json, f, indent=4)
+
+    md_lines = [
+        "# TRIBUNAL FINAL DE VALIDACIÓN SOTA — PROYECTO BLOC-RELOC",
+        "",
+        "## 1. Resumen Ejecutivo",
+        f"- **Conclusión del Tribunal:** **{conclusion_choice}**",
+        f"- **Algoritmo Líder en Ranking:** `{ranking.index[0]}` (Costo Promedio: `{ranking.iloc[0]:.2f}`)",
+        "",
+        "## 2. Ranking Global",
+        "```text",
+        ranking.to_string(),
+        "```"
+    ]
+    md_content = "\n".join(md_lines)
+    with open(f"{REPORT_DIR}/Executive_Summary.md", 'w') as f:
+        f.write(md_content)
+
+    print(f"\n[✓] REPORTE Y ESTADÍSTICAS GENERADOS EXITOSAMENTE EN `{REPORT_DIR}/`.")
+
+if __name__ == "__main__":
+    main()

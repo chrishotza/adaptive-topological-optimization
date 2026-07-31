@@ -1,0 +1,17 @@
+==================================================================================================================================
+ ETAPA 2: VALIDACIÓN DEL ESCAPE NO LOCAL CONTROLADO (ENLC)
+==================================================================================================================================
+[REGISTRO] Barabasi_Albert    | Escapes ejecutados: 0 | Logs de transición: []
+[REGISTRO] Erdos_Renyi        | Escapes ejecutados: 0 | Logs de transición: []
+[REGISTRO] PowerGrid_Sim      | Escapes ejecutados: 0 | Logs de transición: []
+[REGISTRO] Social_Network     | Escapes ejecutados: 0 | Logs de transición: []
+
+==================================================================================================================================
+ [TABLA CONSOLIDADA ETAPA 2: RENDIMIENTO DE ENLC]
+==================================================================================================================================
+      Instancia    N  METIS  PFV Baseline  PFV + ENLC Δ vs Baseline Δ vs METIS  Escapes
+Barabasi_Albert 2000   2961          2875        2875            +0        -86        0
+    Erdos_Renyi 2000  15612         15517       15517            +0        -95        0
+  PowerGrid_Sim 2000   1385          1345        1345            +0        -40        0
+ Social_Network 1500    488           618         618            +0       +130        0
+==================================================================================================================================

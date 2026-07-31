@@ -1,0 +1,71 @@
+Algorithm,Instance,mean,std
+BLOC_RELOC (Proposed),SNAP_Facebook,6449.95,0.0
+BLOC_RELOC (Proposed),SNAP_WikiVote,1061.85,0.0
+BLOC_RELOC (Proposed),Stress_Disconnected,100.0,0.0
+BLOC_RELOC (Proposed),Stress_PlantedPartition,300.0,0.0
+BLOC_RELOC (Proposed),Stress_Regular_RR,225.0,0.0
+BLOC_RELOC (Proposed),Stress_ScaleFree_BA,300.0,0.0
+BLOC_RELOC (Proposed),Stress_SmallWorld_WS,300.0,0.0
+Breakout_Local_Search,SNAP_Facebook,1669.7400000000002,958.3338515360919
+Breakout_Local_Search,SNAP_WikiVote,4468.655000000001,5622.616019476363
+Breakout_Local_Search,Stress_Disconnected,100.0,0.0
+Breakout_Local_Search,Stress_PlantedPartition,3120.0,0.0
+Breakout_Local_Search,Stress_Regular_RR,1082.3799999999999,1866.8475803997615
+Breakout_Local_Search,Stress_ScaleFree_BA,300.0,0.0
+Breakout_Local_Search,Stress_SmallWorld_WS,2140.2,147.04218593466447
+Genetic,SNAP_Facebook,65937.39499999999,102.28117957104891
+Genetic,SNAP_WikiVote,75286.64499999999,105.1448985659548
+Genetic,Stress_Disconnected,9166.84,28.356743270144566
+Genetic,Stress_PlantedPartition,32048.26,32.24710839749872
+Genetic,Stress_Regular_RR,8894.9,35.87400792279024
+Genetic,Stress_ScaleFree_BA,14795.98,64.5407330468308
+Genetic,Stress_SmallWorld_WS,8895.98,27.194680852451537
+Greedy,SNAP_Facebook,11245.495,4021.1875788302755
+Greedy,SNAP_WikiVote,33605.134999999995,9628.788842091371
+Greedy,Stress_Disconnected,5841.6,34.052900023346034
+Greedy,Stress_PlantedPartition,17997.36,4187.8920115547935
+Greedy,Stress_Regular_RR,8125.259999999999,46.66962371583667
+Greedy,Stress_ScaleFree_BA,13101.52,692.5543842263302
+Greedy,Stress_SmallWorld_WS,4137.84,237.47935208490594
+KaHyPar_SOTA,SNAP_Facebook,11245.495,4021.1875788302755
+KaHyPar_SOTA,SNAP_WikiVote,33605.134999999995,9628.788842091371
+KaHyPar_SOTA,Stress_Disconnected,5841.6,34.052900023346034
+KaHyPar_SOTA,Stress_PlantedPartition,17997.36,4187.8920115547935
+KaHyPar_SOTA,Stress_Regular_RR,8125.259999999999,46.66962371583667
+KaHyPar_SOTA,Stress_ScaleFree_BA,13101.52,692.5543842263302
+KaHyPar_SOTA,Stress_SmallWorld_WS,4137.84,237.47935208490594
+Kernighan_Lin,SNAP_Facebook,1669.7400000000002,958.3338515360919
+Kernighan_Lin,SNAP_WikiVote,4468.655000000001,5622.616019476363
+Kernighan_Lin,Stress_Disconnected,100.0,0.0
+Kernighan_Lin,Stress_PlantedPartition,3120.0,0.0
+Kernighan_Lin,Stress_Regular_RR,1082.3799999999999,1866.8475803997615
+Kernighan_Lin,Stress_ScaleFree_BA,300.0,0.0
+Kernighan_Lin,Stress_SmallWorld_WS,2140.2,147.04218593466447
+Random,SNAP_Facebook,66172.01999999999,130.59157323502927
+Random,SNAP_WikiVote,75613.86,152.73180888225096
+Random,Stress_Disconnected,9262.98,59.75137004472953
+Random,Stress_PlantedPartition,32257.379999999997,88.80552785597207
+Random,Stress_Regular_RR,9021.060000000001,44.92819456273201
+Random,Stress_ScaleFree_BA,14938.179999999998,46.53662357040274
+Random,Stress_SmallWorld_WS,8988.58,43.17081833316948
+Simulated_Annealing,SNAP_Facebook,65233.094999999994,167.7253781400498
+Simulated_Annealing,SNAP_WikiVote,74997.095,151.82672771946346
+Simulated_Annealing,Stress_Disconnected,8646.060000000001,66.6299932462855
+Simulated_Annealing,Stress_PlantedPartition,31351.28,66.64754392407212
+Simulated_Annealing,Stress_Regular_RR,8475.74,52.74745280843239
+Simulated_Annealing,Stress_ScaleFree_BA,14348.2,42.41624426770685
+Simulated_Annealing,Stress_SmallWorld_WS,8454.52,51.59838068087835
+Spectral,SNAP_Facebook,4479.45,0.0
+Spectral,SNAP_WikiVote,999999.0,0.0
+Spectral,Stress_Disconnected,6087.0,0.0
+Spectral,Stress_PlantedPartition,4492.0,0.0
+Spectral,Stress_Regular_RR,7367.0,0.0
+Spectral,Stress_ScaleFree_BA,12854.0,0.0
+Spectral,Stress_SmallWorld_WS,2255.0,0.0
+Tabu_Search,SNAP_Facebook,11134.295,4003.117563672511
+Tabu_Search,SNAP_WikiVote,33281.015,9545.658709767551
+Tabu_Search,Stress_Disconnected,5640.719999999999,38.74821286201483
+Tabu_Search,Stress_PlantedPartition,17242.5,4165.406547852068
+Tabu_Search,Stress_Regular_RR,7936.08,40.675758546502344
+Tabu_Search,Stress_ScaleFree_BA,12801.34,702.8476620150345
+Tabu_Search,Stress_SmallWorld_WS,4043.28,226.8728905013653
