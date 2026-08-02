@@ -3,6 +3,7 @@
 # BLOC-RELOC v2.4: Selección Híbrida con Ranking y Pool de Diversidad Top-3
 # ==============================================================================
 
+import os
 import time
 import warnings
 from dataclasses import dataclass

@@ -3,6 +3,7 @@
 # Campaña de Validación y Evolución - BLOC-RELOC v2.1 (Bloques Dinámicos)
 # ==============================================================================
 
+import os
 import time
 import warnings
 import json

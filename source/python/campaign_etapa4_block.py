@@ -5,6 +5,7 @@ MVP de optimización por bloques coordinados (BLOC-RELOC) para particionamiento 
 Objetivo: Romper el techo de PFV (618) en Social_Network y acercarse a METIS (488).
 """
 
+import os
 import random
 import networkx as nx
 

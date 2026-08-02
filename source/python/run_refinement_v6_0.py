@@ -3,6 +3,7 @@
 # BLOC-RELOC v6.0: Generador de Dataset para Meta-Aprendizaje
 # ==============================================================================
 
+import os
 import time
 import warnings
 from dataclasses import dataclass

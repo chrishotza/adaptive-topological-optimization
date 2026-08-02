@@ -3,6 +3,7 @@
 # BLOC-RELOC v7.0: Script Automatizado para Terminal
 # ==============================================================================
 
+import os
 import time
 import warnings
 import random

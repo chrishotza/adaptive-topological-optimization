@@ -1,3 +1,4 @@
+import os
 import time
 import networkx as nx
 import numpy as np

@@ -4,6 +4,7 @@
 # Propietario: Laboratorio TCF
 # ==============================================================================
 
+import os
 import time
 import warnings
 from abc import ABC, abstractmethod

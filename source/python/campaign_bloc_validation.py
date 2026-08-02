@@ -4,6 +4,7 @@
 # Refinador Candidato v2: BLOC-RELOC vs PFV Baseline
 # ==============================================================================
 
+import os
 import time
 import warnings
 import json

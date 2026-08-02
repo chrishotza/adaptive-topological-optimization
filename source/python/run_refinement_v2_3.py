@@ -3,6 +3,7 @@
 # BLOC-RELOC v2.3: Selección Inteligente y Ranking de Bloques Candidatos
 # ==============================================================================
 
+import os
 import time
 import warnings
 from dataclasses import dataclass

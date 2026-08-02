@@ -3,6 +3,7 @@
 # BLOC-RELOC v4.0: Arquitectura Modular con Dispatcher Topológico Automático
 # ==============================================================================
 
+import os
 import time
 import warnings
 from dataclasses import dataclass

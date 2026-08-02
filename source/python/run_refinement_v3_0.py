@@ -3,6 +3,7 @@
 # BLOC-RELOC v3.0: Generación de Bloques por Cohesión Estructural (Vecinos Compartidos)
 # ==============================================================================
 
+import os
 import time
 import warnings
 from dataclasses import dataclass

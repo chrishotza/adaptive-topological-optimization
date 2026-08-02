@@ -3,6 +3,7 @@
 # BLOC-RELOC v5.0: Dispatcher Basado en Vector Topológico Multidimensional
 # ==============================================================================
 
+import os
 import time
 import warnings
 from dataclasses import dataclass
