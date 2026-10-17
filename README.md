@@ -1,5 +1,9 @@
 # Adaptive Topological Optimization Framework (ATOF)
 
+> **Historical research snapshot / Archivo de investigación.** This repository preserves the earlier 11-phase exploratory graph-optimization research and benchmarks. For the current, Python-facing graph-partitioning toolkit with tests and CI, visit **[ATOF (current framework)](https://github.com/chrishotza/Adaptiv-Topologica-Optimization-Framework)**. Historical numbers below are study-specific, not universal algorithm performance guarantees.
+
+> **Archivo histórico:** este repositorio conserva los experimentos y resultados previos. El framework más reciente, con interfaz para Python y pruebas, está en el [ATOF actual](https://github.com/chrishotza/Adaptiv-Topologica-Optimization-Framework).
+
 
 ## 🚀 Quick Start
 
@@ -26,7 +30,7 @@ python scripts/generate_figures.py
 
 ## 📄 Paper & Citation
 
-Paper submitted to arXiv. Coming soon.
+The original project history describes an arXiv submission, but this README does **not** provide a public arXiv identifier or independently verifiable paper link. The BibTeX entry below is a **provisional manuscript reference**, not a confirmed published preprint. Verify publication status before citing.
 
 ```bibtex
 @preprint{chrishotza2025atof,
