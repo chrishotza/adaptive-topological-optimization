@@ -1,0 +1,42 @@
+name: Reproduce historical figures
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/generate_figures.py"
+      - "requirements-figures.txt"
+      - "evidence/csv/meta_dataset_v14_adimensional.csv"
+      - "evidence/csv/sota_benchmark_summary_ranking.csv"
+      - ".github/workflows/figures-ci.yml"
+  pull_request:
+    paths:
+      - "scripts/generate_figures.py"
+      - "requirements-figures.txt"
+      - "evidence/csv/meta_dataset_v14_adimensional.csv"
+      - "evidence/csv/sota_benchmark_summary_ranking.csv"
+      - ".github/workflows/figures-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  figures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install only figure dependencies
+        run: python -m pip install -r requirements-figures.txt
+      - name: Render from checked-in evidence
+        env:
+          MPLBACKEND: Agg
+        run: python scripts/generate_figures.py
+      - name: Check output files exist and are non-empty
+        run: |
+          test -s figures/figure1_regime_space.png
+          test -s figures/figure2_performance_comparison.png
+          test -s figures/figure3_confusion_matrix.png
