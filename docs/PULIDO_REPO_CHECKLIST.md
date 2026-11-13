@@ -1,19 +1,26 @@
+> **Nota de mantenimiento (2026-11-13):** Este checklist es un borrador histórico de planificación,
+> no evidencia de publicación en arXiv. Los identificadores XXXX, autores y tiempos estimados
+> son marcadores de ejemplo, no citas verificadas. Para figuras y dependencias actuales, usar
+> los comandos del README principal. No ejecutar cambios masivos de rutas sin revisar el diff.
+
 # ✅ CHECKLIST: Pulir repo para publicación en arXiv
 
-## PASO 1: Crear requirements.txt
+## PASO 1: Instalar dependencias de figuras (sin sobrescribir el entorno histórico)
 ```bash
 cd /ruta/a/tu/repo
-pip freeze > requirements.txt
+python -m pip install -r requirements-figures.txt
 ```
-**Output esperado:** Archivo `requirements.txt` con todas las librerías y versiones.
+**Nota:** `requirements.txt` ya contiene dependencias históricas; no debe reemplazarse con `pip freeze`.
 
 ---
 
 ## PASO 2: Arreglar rutas relativas en scripts
 ```bash
-python fix_relative_paths.py
+python scripts/fix_relative_paths.py --diff
+# Después de revisar los cambios propuestos:
+python scripts/fix_relative_paths.py --apply
 ```
-**Qué hace:** Modifica todos los scripts en `source/python/` para usar rutas relativas con `os.path.join()` en lugar de rutas hardcodeadas.
+**Qué hace:** En modo normal solo propone cambios a llamadas con nombres CSV simples. No altera archivos hasta usar `--apply` explícitamente. El script no ejecuta experimentos.
 
 **Verificación:** Abre un script cualquiera (ej: `experiment_phase3_triclass_meta_selector.py`) y verifica que diga:
 ```python
@@ -26,7 +33,7 @@ df = pd.read_csv(os.path.join(os.path.dirname(__file__), '..', '..', 'evidence',
 
 ## PASO 3: Generar las 3 figuras
 ```bash
-python generate_figures.py
+python scripts/generate_figures.py
 ```
 **Output esperado:** 
 ```
@@ -46,7 +53,7 @@ figures/figure3_confusion_matrix.png
 %cd adaptive-topological-optimization
 
 # Cell 2
-!pip install -r requirements.txt
+!pip install -r requirements-figures.txt
 
 # Cell 3
 import pandas as pd
@@ -55,7 +62,7 @@ print(df.head())
 # Verificar que los datos cargan sin errores
 
 # Cell 4
-!python generate_figures.py
+!python scripts/generate_figures.py
 ```
 
 Esto permite que cualquiera reproduzca los experimentos sin instalar nada localmente.
@@ -87,7 +94,7 @@ pip install -r requirements.txt
 python source/python/run_phase11_sota_benchmark.py
 
 # Generate paper figures
-python generate_figures.py
+python scripts/generate_figures.py
 ```
 
 ### Expected Output
@@ -155,7 +162,7 @@ Una vez que tengas el arXiv ID, cambiar el README:
 ## ✅ CHECKLIST FINAL
 
 - [ ] `requirements.txt` creado
-- [ ] Rutas relativas en scripts (ejecutar `fix_relative_paths.py`)
+- [ ] Revisar la vista previa de `scripts/fix_relative_paths.py --diff` y aplicar solo si corresponde
 - [ ] 3 figuras generadas en `figures/` (ejecutar `generate_figures.py`)
 - [ ] README actualizado con instrucciones y figuras
 - [ ] Paper PDF listo

@@ -15,6 +15,22 @@ python -m pip install -r requirements-figures.txt
 python scripts/generate_figures.py
 ```
 
+### Historical CSV path repair (opt-in)
+
+The archived maintenance tool is **read-only by default**. It previews proposed edits to
+simple `pd.read_csv("file.csv")` calls in `source/python/`; it does not run experiments
+or modify any historical data. Review every patch before editing the historical scripts:
+
+```bash
+python scripts/fix_relative_paths.py --diff
+python scripts/fix_relative_paths.py --check  # returns 1 when candidate edits remain
+python scripts/fix_relative_paths.py --apply  # explicit write; review the diff first
+```
+
+Changes are syntax-checked, affect only actual Python calls (not comments/docstrings),
+and are covered by synthetic offline unit tests. This does not guarantee that every
+historical script is runnable or that its datasets are available.
+
 The full `requirements.txt` is a frozen historical notebook environment, **not** a minimal runtime dependency list. Re-running the phase-11 benchmark is a separate, potentially long experimental task that may require native solver packages and environment-specific setup. Figure 2 reads the checked-in CSV and does not invent error bars when standard deviations for `Mean_Cut` are unavailable.
 
 ## 📊 Key Results
