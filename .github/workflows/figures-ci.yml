@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "scripts/generate_figures.py"
+      - "scripts/fix_relative_paths.py"
+      - "tests/test_fix_relative_paths.py"
       - "requirements-figures.txt"
       - "evidence/csv/meta_dataset_v14_adimensional.csv"
       - "evidence/csv/sota_benchmark_summary_ranking.csv"
@@ -12,6 +14,8 @@ on:
   pull_request:
     paths:
       - "scripts/generate_figures.py"
+      - "scripts/fix_relative_paths.py"
+      - "tests/test_fix_relative_paths.py"
       - "requirements-figures.txt"
       - "evidence/csv/meta_dataset_v14_adimensional.csv"
       - "evidence/csv/sota_benchmark_summary_ranking.csv"
@@ -31,6 +35,8 @@ jobs:
           python-version: "3.12"
       - name: Install only figure dependencies
         run: python -m pip install -r requirements-figures.txt
+      - name: Verify safe path repair is read-only by default
+        run: python -m unittest discover -s tests -p "test_fix_relative_paths.py" -v
       - name: Render from checked-in evidence
         env:
           MPLBACKEND: Agg
