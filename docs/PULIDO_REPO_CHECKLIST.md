@@ -16,7 +16,9 @@ python -m pip install -r requirements-figures.txt
 
 ## PASO 2: Arreglar rutas relativas en scripts
 ```bash
-python scripts/fix_relative_paths.py --diff\n# Después de revisar los cambios propuestos:\npython scripts/fix_relative_paths.py --apply
+python scripts/fix_relative_paths.py --diff
+# Después de revisar los cambios propuestos:
+python scripts/fix_relative_paths.py --apply
 ```
 **Qué hace:** En modo normal solo propone cambios a llamadas con nombres CSV simples. No altera archivos hasta usar `--apply` explícitamente. El script no ejecuta experimentos.
 
