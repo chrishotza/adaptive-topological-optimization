@@ -17,31 +17,49 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIR = ROOT / "source" / "python"
-SIMPLE_CSV = re.compile(
-    r"""pd\.read_csv\(\s*(?P<quote>['"])(?P<name>[A-Za-z0-9_.-]+\.csv)(?P=quote)\s*\)"""
-)
-
 
 def rewrite_source(source: str) -> str:
-    """Rewrite only literal CSV basenames; never evaluate source code."""
-    def replace(match: re.Match[str]) -> str:
-        filename = match.group("name")
-        return (
-            "pd.read_csv(os.path.join(os.path.dirname(__file__), "
-            "'..', '..', 'evidence', 'csv', '" + filename + "'))"
-        )
+    """Rewrite only actual simple CSV arguments of pd.read_csv calls.
 
-    result, replacements = SIMPLE_CSV.subn(replace, source)
-    if not replacements:
-        return source
+    AST positions select executable code, not text in comments/docstrings.
+    UTF-8 byte offsets preserve unrelated Unicode and original formatting.
+    """
     original_tree = ast.parse(source)
+    line_start_bytes = [0]
+    for line in source.splitlines(keepends=True):
+        line_start_bytes.append(line_start_bytes[-1] + len(line.encode("utf-8")))
+    edits: list[tuple[int, int, str]] = []
+    for node in ast.walk(original_tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+            continue
+        if (node.func.attr != "read_csv"
+                or not isinstance(node.func.value, ast.Name)
+                or node.func.value.id != "pd"
+                or not node.args):
+            continue
+        argument = node.args[0]
+        if not isinstance(argument, ast.Constant) or not isinstance(argument.value, str):
+            continue
+        if not re.fullmatch(r"[A-Za-z0-9_.-]+\.csv", argument.value):
+            continue
+        begin = line_start_bytes[argument.lineno - 1] + argument.col_offset
+        finish = line_start_bytes[argument.end_lineno - 1] + argument.end_col_offset
+        replace_with = (
+            "os.path.join(os.path.dirname(__file__), '..', '..', "
+            "'evidence', 'csv', " + repr(argument.value) + ")"
+        )
+        edits.append((begin, finish, replace_with))
+    if not edits:
+        return source
+    content = source.encode("utf-8")
+    for begin, finish, replace_with in sorted(edits, reverse=True):
+        content = content[:begin] + replace_with.encode("utf-8") + content[finish:]
+    result = content.decode("utf-8")
     imports_os = any(
         isinstance(node, ast.Import) and any(alias.name == "os" for alias in node.names)
         for node in original_tree.body
     )
     if not imports_os:
-        # Future imports must precede ordinary imports. Module docstrings
-        # must also remain at the beginning of the Python module.
         insertion = 0
         if (original_tree.body and isinstance(original_tree.body[0], ast.Expr)
                 and isinstance(original_tree.body[0].value, ast.Constant)
@@ -59,7 +77,7 @@ def rewrite_source(source: str) -> str:
         newline = "\r\n" if "\r\n" in source else "\n"
         lines.insert(insertion, "import os" + newline)
         result = "".join(lines)
-    ast.parse(result)  # Never generate broken Python without warning.
+    ast.parse(result)  # Never emit syntactically invalid Python.
     return result
 
 
@@ -83,7 +101,7 @@ def atomic_write(path: Path, content: str) -> None:
     """Retain the original mode and replace one opt-in source file atomically."""
     descriptor, temporary = tempfile.mkstemp(prefix=".relative-paths-", dir=path.parent)
     try:
-        os.fchmod(descriptor, stat.S_IMODE(path.stat().st_mode))
+        os.chmod(temporary, stat.S_IMODE(path.stat().st_mode))
         with os.fdopen(descriptor, "w", encoding="utf-8", newline="") as output:
             output.write(content)
         os.replace(temporary, path)
