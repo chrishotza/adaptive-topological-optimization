@@ -36,6 +36,21 @@ class SafePathMigrationTests(unittest.TestCase):
         )
         self.assertEqual(module.rewrite_source(original), original)
 
+    def test_does_not_modify_comments_or_strings_and_preserves_unicode_offsets(self):
+        original = (
+            'import pandas as pd\n'
+            '# pd.read_csv("comment.csv")\n'
+            'description = "pd.read_csv(\'fake.csv\')"\n'
+            'print("💚") ; df = pd.read_csv("real.csv", header=0)\n'
+        )
+        updated = module.rewrite_source(original)
+        ast.parse(updated)
+        self.assertIn('# pd.read_csv("comment.csv")', updated)
+        self.assertIn('description = "pd.read_csv(', updated)
+        self.assertIn('print("💚")', updated)
+        self.assertIn("'evidence', 'csv', 'real.csv'", updated)
+        self.assertEqual(updated.count("'evidence', 'csv'"), 1)
+
     def test_dry_run_does_not_modify_file_and_apply_is_explicit(self):
         with TemporaryDirectory() as temp:
             folder = Path(temp)
