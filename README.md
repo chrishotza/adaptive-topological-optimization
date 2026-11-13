@@ -8,15 +8,14 @@
 ## 🚀 Quick Start
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Lightweight dependencies for re-generating the archived figures
+python -m pip install -r requirements-figures.txt
 
-# Run benchmark (optional, ~2h)
-python source/python/run_phase11_sota_benchmark.py
-
-# Generate paper figures
+# Works from any working directory
 python scripts/generate_figures.py
 ```
+
+The full `requirements.txt` is a frozen historical notebook environment, **not** a minimal runtime dependency list. Re-running the phase-11 benchmark is a separate, potentially long experimental task that may require native solver packages and environment-specific setup. Figure 2 reads the checked-in CSV and does not invent error bars when standard deviations for `Mean_Cut` are unavailable.
 
 ## 📊 Key Results
 

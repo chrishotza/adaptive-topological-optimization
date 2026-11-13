@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,8 +6,9 @@ import seaborn as sns
 from pathlib import Path
 
 # Rutas relativas desde repo root
-EVIDENCE_CSV = Path("evidence/csv")
-OUTPUT_FIGURES = Path("figures")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+EVIDENCE_CSV = REPO_ROOT / "evidence" / "csv"
+OUTPUT_FIGURES = REPO_ROOT / "figures"
 OUTPUT_FIGURES.mkdir(exist_ok=True)
 
 plt.style.use('seaborn-v0_8-darkgrid')
@@ -40,29 +40,57 @@ print("   [✓] figures/figure1_regime_space.png")
 # Figura 2: Bar chart de rendimiento
 print("\n[2] Generando Figura 2: Performance Comparison Bar Chart...")
 df_sota = pd.read_csv(EVIDENCE_CSV / "sota_benchmark_summary_ranking.csv")
-algos = ['BLOC-RELOC', 'Breakout_Local_Search', 'Tabu_Search',
-         'Simulated_Annealing', 'Genetic_Algorithm']
+# These IDs must match the historical CSV exactly; no synthetic measurements.
+algos = [
+    'MetaSelector_BLOC_RELOC',
+    'Breakout_Local_Search',
+    'Tabu_Search',
+    'Simulated_Annealing',
+    'Genetic_Algorithm',
+]
+missing = set(algos) - set(df_sota['Algorithm'])
+if missing:
+    raise ValueError(f"Missing algorithms in source CSV: {sorted(missing)}")
 df_plot = df_sota[df_sota['Algorithm'].isin(algos)].copy()
 df_plot = df_plot.sort_values('Mean_Cut')
 fig, ax = plt.subplots(figsize=(12, 7))
-bars = ax.bar(range(len(df_plot)), df_plot['Mean_Cut'],
-              color=['#2ecc71' if x == 'BLOC-RELOC' else '#3498db' for x in df_plot['Algorithm']],
-              alpha=0.8, edgecolor='black', linewidth=1.5)
+ax.bar(
+    range(len(df_plot)), df_plot['Mean_Cut'],
+    color=['#2ecc71' if x == 'MetaSelector_BLOC_RELOC' else '#3498db'
+           for x in df_plot['Algorithm']],
+    alpha=0.8, edgecolor='black', linewidth=1.5,
+)
+# Only plot observed uncertainty. Std_Gap measures a different variable
+# and cannot substitute for a missing Std_Cut column.
 if 'Std_Cut' in df_plot.columns:
     errors = df_plot['Std_Cut']
+    if errors.isna().any() or (errors < 0).any():
+        raise ValueError("Std_Cut must contain nonnegative, nonmissing values")
+    ax.errorbar(
+        range(len(df_plot)), df_plot['Mean_Cut'],
+        yerr=errors, fmt='none', color='black',
+        capsize=8, linewidth=2, alpha=0.7,
+    )
 else:
-    errors = df_plot['Mean_Cut'] * 0.15
-ax.errorbar(range(len(df_plot)), df_plot['Mean_Cut'],
-            yerr=errors, fmt='none', color='black', capsize=8, linewidth=2, alpha=0.7)
+    ax.text(
+        0.01, 0.98, 'No error bars: Std_Cut not present in source data',
+        transform=ax.transAxes, va='top', fontsize=9,
+    )
 ax.set_xticks(range(len(df_plot)))
-ax.set_xticklabels([name.replace('_', ' ') for name in df_plot['Algorithm']],
-                   rotation=45, ha='right', fontsize=11)
-ax.set_ylabel('Mean Cut Size (lower is better)', fontsize=14, fontweight='bold')
-ax.set_title('BLOC-RELOC vs SOTA Algorithms', fontsize=16, fontweight='bold')
+ax.set_xticklabels(
+    [name.replace('_', ' ') for name in df_plot['Algorithm']],
+    rotation=35, ha='right', fontsize=11,
+)
+ax.set_ylabel('Mean Cut Size (lower is better)', fontsize=14)
+ax.set_title('Historical benchmark: mean edge cut', fontsize=16)
 ax.grid(True, alpha=0.3, axis='y')
-for i, (idx, row) in enumerate(df_plot.iterrows()):
-    ax.text(i, row['Mean_Cut'] + errors.iloc[i] + 100,
-            f"{row['Mean_Cut']:.0f}", ha='center', va='bottom', fontweight='bold', fontsize=10)
+for i, (_, row) in enumerate(df_plot.iterrows()):
+    ax.annotate(
+        f"{row['Mean_Cut']:.0f}",
+        (i, row['Mean_Cut']), xytext=(0, 4),
+        textcoords='offset points', ha='center', va='bottom', fontsize=10,
+    )
+ax.margins(y=0.15)
 plt.tight_layout()
 plt.savefig(OUTPUT_FIGURES / "figure2_performance_comparison.png", dpi=300)
 plt.close()
